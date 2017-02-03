@@ -1,149 +1,98 @@
 import React, { Component } from 'react';
+import {Router, Route, Link, browserHistory, IndexRoute} from 'react-router';
+import { Home } from './home.js';
+import { About } from './about.js';
+import { Contact } from './contact.js';
+import { ReactJs } from './reactjs.js';
+
 import './App.css';
+import logo from './logo.svg';
 
 
-//stateful component- which has a state whic changes dynamically. here the src logo might change.
-//create an component, header-img, footer, body-p
-//in here we write our components
-// props are immutable and static 
-//owner(parent-- APP component) -ownee(child-- header,content and footer) relationship - changes to states of child components are updated by the parent components
-//components can be anything a class, function, etc
 class App extends Component {
-
-
   render() {
     return (
-      
-      <div className="App">
-        <Header/>
-        <Content/>
-      
-        <Footer/>
-      </div>
-
+     <div className="App">
+         <Header></Header>
+         <Routers></Routers>
+         <Footer></Footer>
+     </div>
     );
   }
 } 
 
-class Header extends Component{ /*/*this is the syntax for component creatin with class (header component)*/
-
+class Header extends Component{ 
   render () {
 
     return (
-      <div className="App-header">
-          <h2>This is the header section</h2> 
+      <div className="App-header"> 
+        <img src={logo} className="App-logo" alt="logo" /> <label id="logo"> React JS </label>
+        <Nav></Nav>
       </div>
       );
-  }/*this render method will help in parsing html inside this js code*/
+  }
 }
 
-class Content extends Component{ 
 
- constructor(){
+class Nav extends Component{
+  render(){
+    return(
+          <div className="App">
+            <nav className="navbar navbar-inverse">
+                <div className="container-fluid">
 
-   super();
-
-  this.state ={
-    data:
-      [
-        {"name":"John", "age":"20" },
-        {"name":"SAm", "age":"30" },
-        {"name":"Pam", "age":"23" },
-        {"name":"Pam", "age":"28" },
-        {"name":"Julie", "age":"24" }
-       
-    ]
-   }
-}
-  
-
-
-
- changeContent(e) {
-
-   
-    console.log('Name changed to '+ this.refs.name.value);
-
-    console.log('Age chnaged to '+ this.refs.age.value);
-
- }
-
-
-
-  sendContent() {
-  
- /*Object person = new Object()*/
-  
-var person ={}
-
-person.name = this.refs.name.value,
-person.age = this.refs.age.value,
-
-console.log(person)
-
-var newPerson = this.state.data.slice()
-newPerson.push(person)
-this.setState({ data: newPerson })
-    
- 
-
-  } 
-
-   
-  render () {
-
-    return (
-      <div className="App-content">
-          <h2>This is the Content section with a data</h2> 
-          <table>
-            <tbody>
-            {this.state.data.map(
-              (person, i) => <TableRow  key= {i} data = {person} />
-              )
-            }
-            </tbody>           
-          </table>
-
-          <div>
-            name:<input type="text" ref="name"  onChange={this.changeContent.bind(this)}/>
-            age:<input type="text" ref="age"  onChange={this.changeContent.bind(this)} />
-            <button onClick={this.sendContent.bind(this)}>submit</button> 
+                  <div className="navbar-header">
+                    <Link className="navbar-brand" to="/"></Link>
+                  </div>
+              
+                  <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul className="nav navbar-nav">
+                      <li><Link to="/">Home</Link></li>
+                      <li><Link to="/about">About</Link></li>
+                      <li><Link to="/contact">Contact</Link></li>
+                      <li><Link to="/react">React</Link></li>
+                    </ul>
+                   
+                    <ul className="nav navbar-nav navbar-right">
+                      <li><Link to="/contact">Contact</Link></li>
+                      <li><Link to="/react">React</Link></li>
+                    </ul>
+                  </div>
+                </div>
+              </nav>
+            <div className="container">
+              {this.props.children}
+            </div>
           </div>
-
-        
-      </div>
+    );
+  }
+}      
+     
+class Routers extends Component{
+  render(){
+    return(
+        <Router history={ browserHistory }>
+               <Route path="/" component={Home}>
+                 <IndexRoute component={Home}/>
+                   <Route path="/about" component={About}></Route>
+                   <Route path="/contact" component={Contact}></Route>
+                   <Route path="/react" component={ReactJs}></Route>  
+               </Route>
+               
+        </Router>  
       );
   }
 }
 class Footer extends Component{ 
 
   render () {
-
     return (
       <div className="App-footer">
-         <p>
-    Copyright &copy; ReactApps.com
-  </p> 
+         <p> Copyright &copy; ReactApps.com </p> 
       </div>
       );
   }
 }
-
-class TableRow  extends Component{ /*this component is used in content component to disply the dynamic data using props(data). here we are accessing the name & age values of an data obj(which is declared in content component) using props*/
-
-  render(){
-
-    return (
-      <tr>  
-        <td>{this.props.data.name}</td>   
-        <td>{this.props.data.age}</td>
-      </tr>
-
-      );
-  }
-}
-
-
 
 
 export default App;
